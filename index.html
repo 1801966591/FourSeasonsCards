@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>梦幻四季卡片</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #e0c3fc, #8ec5fc, #fbc2eb);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+        
+        h1 {
+            color: #fff;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            margin-bottom: 40px;
+            font-size: 2.8rem;
+            letter-spacing: 2px;
+            position: relative;
+            animation: titleGlow 3s ease-in-out infinite alternate;
+        }
+        
+        @keyframes titleGlow {
+            0% { text-shadow: 0 2px 10px rgba(0,0,0,0.2); }
+            100% { text-shadow: 0 2px 20px rgba(255,255,255,0.5), 0 5px 30px rgba(255,255,255,0.4); }
+        }
+        
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 3px;
+            background: linear-gradient(to right, transparent, white, transparent);
+        }
+        
+        .cards-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px;
+        }
+        
+        .card {
+            width: 260px;
+            height: 350px;
+            border-radius: 20px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+            cursor: pointer;
+        }
+        
+        .card:hover {
+            transform: translateY(-15px) scale(1.03);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+        
+        .card-content {
+            position: relative;
+            z-index: 2;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 25px;
+            color: white;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        }
+        
+        .season-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            transition: transform 0.5s ease;
+        }
+        
+        .card:hover .season-icon {
+            transform: scale(1.2);
+        }
+        
+        .season-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+        
+        .season-desc {
+            font-size: 1rem;
+            line-height: 1.6;
+            opacity: 0.9;
+            max-width: 90%;
+        }
+        
+        /* 春天卡片样式 - 粉色系 */
+        .spring {
+            background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+        }
+        
+        /* 夏天卡片样式 - 蓝色系 */
+        .summer {
+            background: linear-gradient(135deg, #64b3f4, #c2e59c);
+        }
+        
+        /* 秋天卡片样式 - 橙色系 */
+        .autumn {
+            background: linear-gradient(135deg, #ffb75e, #ed8f03);
+        }
+        
+        /* 冬天卡片样式 - 蓝白色系 */
+        .winter {
+            background: linear-gradient(135deg, #e6f7ff, #b3e0ff);
+        }
+        
+        /* 春天动画效果 - 花瓣飘落 */
+        .spring-effect {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            overflow: hidden;
+        }
+        
+        .petal {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 50% 50% 0 50%;
+            transform: rotate(-45deg);
+            animation: fall linear infinite;
+        }
+        
+        @keyframes fall {
+            to {
+                transform: translateY(350px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        /* 夏天动画效果 - 波浪和脉动太阳 */
+        .summer-effect {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            overflow: hidden;
+        }
+        
+        .wave {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 200%;
+            height: 10em;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 45% 48% 43% 47%;
+            transform: translateX(-25%);
+            animation: wave 8s linear infinite;
+        }
+        
+        .wave:nth-child(2) {
+            bottom: -1em;
+            opacity: 0.5;
+            border-radius: 44% 42% 46% 42%;
+            animation: wave 10s linear infinite;
+        }
+        
+        .wave:nth-child(3) {
+            bottom: -2em;
+            opacity: 0.3;
+            border-radius: 42% 46% 44% 42%;
+            animation: wave 12s linear infinite;
+        }
+        
+        @keyframes wave {
+            0% {
+                transform: translateX(-25%) rotate(0deg);
+            }
+            50% {
+                transform: translateX(-25%) rotate(180deg);
+            }
+            100% {
+                transform: translateX(-25%) rotate(360deg);
+            }
+        }
+        
+        .pulse-sun {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0) 70%);
+            border-radius: 50%;
+            animation: pulse 3s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { 
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 0.6;
+            }
+            50% { 
+                transform: translate(-50%, -50%) scale(1.5);
+                opacity: 0.3;
+            }
+        }
+        
+        /* 秋天动画效果 - 落叶飘落 */
+        .autumn-effect {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            overflow: hidden;
+        }
+        
+        .leaf {
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            background: #ff8c00;
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+            animation: float linear infinite;
+        }
+        
+        @keyframes float {
+            to {
+                transform: translateY(350px) rotate(720deg);
+                opacity: 0;
+            }
+        }
+        
+        /* 冬天动画效果 - 雪花飘落 */
+        .winter-effect {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            overflow: hidden;
+        }
+        
+        .snowflake {
+            position: absolute;
+            color: white;
+            font-size: 18px;
+            animation: snow linear infinite;
+        }
+        
+        @keyframes snow {
+            to {
+                transform: translateY(350px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        /* 弹窗样式 */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s ease;
+            backdrop-filter: blur(8px);
+        }
+        
+        .modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .modal-content {
+            width: 85%;
+            max-width: 800px;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            position: relative;
+            transform: scale(0.7);
+            transition: transform 0.5s ease;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+        }
+        
+        .modal.active .modal-content {
+            transform: scale(1);
+        }
+        
+        .modal-header {
+            padding: 25px 30px;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+        }
+        
+        .modal-body {
+            padding: 30px;
+            color: #333;
+            background: rgba(255, 255, 255, 0.9);
+        }
+        
+        .modal-icon {
+            font-size: 3.5rem;
+            margin-bottom: 15px;
+        }
+        
+        .modal-title {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        
+        .modal-season-title {
+            font-size: 1.8rem;
+            margin-bottom: 25px;
+            opacity: 0.8;
+        }
+        
+        .modal-details {
+            display: flex;
+            gap: 20px;
+            margin-top: 25px;
+        }
+        
+        .detail-box {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
+        }
+        
+        .detail-box:hover {
+            transform: translateY(-5px);
+        }
+        
+        .detail-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #555;
+        }
+        
+        .detail-content {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: #444;
+        }
+        
+        /* 优化关闭按钮 */
+        .close-btn-container {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+        }
+        
+        .close-btn {
+            position: relative;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .close-btn::before, .close-btn::after {
+            content: '';
+            position: absolute;
+            width: 24px;
+            height: 2px;
+            background: white;
+            border-radius: 1px;
+        }
+        
+        .close-btn::before {
+            transform: rotate(45deg);
+        }
+        
+        .close-btn::after {
+            transform: rotate(-45deg);
+        }
+        
+        .close-btn:hover {
+            transform: rotate(90deg);
+            background: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
+        }
+        
+        /* 弹窗季节颜色 */
+        .spring-modal .modal-header {
+            background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+        }
+        
+        .summer-modal .modal-header {
+            background: linear-gradient(135deg, #64b3f4, #c2e59c);
+        }
+        
+        .autumn-modal .modal-header {
+            background: linear-gradient(135deg, #ffb75e, #ed8f03);
+        }
+        
+        .winter-modal .modal-header {
+            background: linear-gradient(135deg, #e6f7ff, #b3e0ff);
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 1100px) {
+            .cards-container {
+                gap: 20px;
+            }
+            .card {
+                width: 230px;
+                height: 320px;
+            }
+        }
+        
+        @media (max-width: 900px) {
+            .modal-details {
+                flex-direction: column;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .cards-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            .card {
+                width: 280px;
+                height: 320px;
+            }
+            h1 {
+                font-size: 2.2rem;
+            }
+            .modal-content {
+                width: 95%;
+            }
+            .modal-header {
+                padding: 15px 20px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .modal-body {
+                padding: 20px;
+            }
+            .modal-title {
+                font-size: 2rem;
+            }
+            .modal-season-title {
+                font-size: 1.5rem;
+            }
+            .close-btn-container {
+                top: 15px;
+                right: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1><i class="fas fa-magic"></i> 梦幻四季卡片 <i class="fas fa-magic"></i></h1>
+        
+        <div class="cards-container">
+            <!-- 春天卡片 -->
+            <div class="card spring" data-season="spring">
+                <div class="spring-effect" id="springEffect"></div>
+                <div class="card-content">
+                    <div class="season-icon"><i class="fas fa-seedling"></i></div>
+                    <h2 class="season-title">春</h2>
+                    <p class="season-desc">万物复苏，生机盎然，花开满园，春风拂面。</p>
+                </div>
+            </div>
+            
+            <!-- 夏天卡片 -->
+            <div class="card summer" data-season="summer">
+                <div class="summer-effect">
+                    <div class="wave"></div>
+                    <div class="wave"></div>
+                    <div class="wave"></div>
+                    <div class="pulse-sun"></div>
+                </div>
+                <div class="card-content">
+                    <div class="season-icon"><i class="fas fa-sun"></i></div>
+                    <h2 class="season-title">夏</h2>
+                    <p class="season-desc">阳光灿烂，绿树成荫，海浪沙滩，生机勃勃。</p>
+                </div>
+            </div>
+            
+            <!-- 秋天卡片 -->
+            <div class="card autumn" data-season="autumn">
+                <div class="autumn-effect" id="autumnEffect"></div>
+                <div class="card-content">
+                    <div class="season-icon"><i class="fas fa-leaf"></i></div>
+                    <h2 class="season-title">秋</h2>
+                    <p class="season-desc">金风送爽，硕果累累，层林尽染，丰收时节。</p>
+                </div>
+            </div>
+            
+            <!-- 冬天卡片 -->
+            <div class="card winter" data-season="winter">
+                <div class="winter-effect" id="winterEffect"></div>
+                <div class="card-content">
+                    <div class="season-icon"><i class="fas fa-snowflake"></i></div>
+                    <h2 class="season-title">冬</h2>
+                    <p class="season-desc">银装素裹，冰雪世界，炉火温暖，静谧安宁。</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 弹窗 -->
+    <div class="modal" id="springModal">
+        <div class="modal-content spring-modal">
+            <div class="modal-header">
+                <div class="modal-icon"><i class="fas fa-seedling"></i></div>
+                <div class="close-btn-container">
+                    <div class="close-btn"></div>
+                </div>
+            </div>
+            <div class="modal-body">
+                <h2 class="modal-title">春天</h2>
+                <div class="modal-season-title">万物复苏的季节</div>
+                <p>春天是万物复苏的季节，大地重新焕发生机。随着气温逐渐升高，冰雪融化，植物开始发芽生长。田野里鲜花盛开，树木抽出新绿，鸟儿在枝头歌唱。春风轻拂，带来温暖与希望的气息。</p>
+                
+                <div class="modal-details">
+                    <div class="detail-box">
+                        <h3 class="detail-title">特点</h3>
+                        <p class="detail-content">• 气温逐渐回升<br>• 植物开始发芽<br>• 动物结束冬眠<br>• 春雨滋润大地</p>
+                    </div>
+                    <div class="detail-box">
+                        <h3 class="detail-title">节日</h3>
+                        <p class="detail-content">• 春节（农历新年）<br>• 清明节<br>• 植树节<br>• 复活节</p>
+                    </div>
+                    <div class="detail-box">
+                        <h3 class="detail-title">活动</h3>
+                        <p class="detail-content">• 踏青赏花<br>• 放风筝<br>• 植树造林<br>• 春游野餐</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal" id="summerModal">
+        <div class="modal-content summer-modal">
+            <div class="modal-header">
+                <div class="modal-icon"><i class="fas fa-sun"></i></div>
+                <div class="close-btn-container">
+                    <div class="close-btn"></div>
+                </div>
+            </div>
+            <div class="modal-body">
+                <h2 class="modal-title">夏天</h2>
+                <div class="modal-season-title">生机勃勃的季节</div>
+                <p>夏天是充满活力的季节，阳光灿烂，万物茁壮成长。树木郁郁葱葱，田野里庄稼茁壮成长，果园中果实累累。人们享受着温暖的阳光，在海滩上玩耍，在游泳池中嬉戏。夏夜星空璀璨，萤火虫在田野间飞舞。</p>
+                
+                <div class="modal-details">
+                    <div class="detail-box">
+                        <h3 class="detail-title">特点</h3>
+                        <p class="detail-content">• 阳光强烈，日照时间长<br>• 气温高，天气炎热<br>• 雷雨天气频繁<br>• 植物生长旺盛</p>
+                    </div>
+                    <div class="detail-box">
+                        <h3 class="detail-title">节日</h3>
+                        <p class="detail-content">• 端午节<br>• 夏至<br>• 七夕节<br>• 国际儿童节</p>
+                    </div>
+                    <div class="detail-box">
+                        <h3 class="detail-title">活动</h3>
+                        <p class="detail-content">• 游泳戏水<br>• 海滩度假<br>• 露营观星<br>• 品尝冰淇淋</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal" id="autumnModal">
+        <div class="modal-content autumn-modal">
+            <div class="modal-header">
+                <div class="modal-icon"><i class="fas fa-leaf"></i></div>
+                <div class="close-btn-container">
+                    <div class="close-btn"></div>
+                </div>
+            </div>
+            <div class="modal-body">
+                <h2 class="modal-title">秋天</h2>
+                <div class="modal-season-title">丰收的季节</div>
+                <p>秋天是收获的季节，田野里金黄的稻谷、果园中成熟的果实，处处洋溢着丰收的喜悦。树叶由绿变黄、变红，层林尽染，构成一幅美丽的画卷。秋高气爽，微风拂面，带来丝丝凉意，正是出游赏景的好时节。</p>
+                
+                <div class="modal-details">
+                    <div class="detail-box">
+                        <h3 class="detail-title">特点</h3>
+                        <p class="detail-content">• 天气凉爽宜人<br>• 树叶变色飘落<br>• 果实成熟<br>• 候鸟迁徙</p>
+                    </div>
+                    <div class="detail-box">
+                        <h3 class="detail-title">节日</h3>
+                        <p class="detail-content">• 中秋节<br>• 国庆节<br>• 重阳节<br>• 万圣节</p>
+                    </div>
+                    <div class="detail-box">
+                        <h3 class="detail-title">活动</h3>
+                        <p class="detail-content">• 赏红叶<br>• 采摘果实<br>• 放风筝<br>• 秋游野餐</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal" id="winterModal">
+        <div class="modal-content winter-modal">
+            <div class="modal-header">
+                <div class="modal-icon"><i class="fas fa-snowflake"></i></div>
+                <div class="close-btn-container">
+                    <div class="close-btn"></div>
+                </div>
+            </div>
+            <div class="modal-body">
+                <h2 class="modal-title">冬天</h2>
+                <div class="modal-season-title">静谧的季节</div>
+                <p>冬天是静谧的季节，大地被白雪覆盖，银装素裹，分外妖娆。树木凋零，动物冬眠，自然界进入休养生息的阶段。人们围坐在温暖的炉火旁，享受家的温馨。冬日的阳光虽然温和，但给寒冷的世界带来一丝温暖。</p>
+                
+                <div class="modal-details">
+                    <div class="detail-box">
+                        <h3 class="detail-title">特点</h3>
+                        <p class="detail-content">• 气温低，天气寒冷<br>• 降雪频繁<br>• 日照时间短<br>• 动物冬眠</p>
+                    </div>
+                    <div class="detail-box">
+                        <h3 class="detail-title">节日</h3>
+                        <p class="detail-content">• 圣诞节<br>• 元旦<br>• 春节<br>• 冬至</p>
+                    </div>
+                    <div class="detail-box">
+                        <h3 class="detail-title">活动</h3>
+                        <p class="detail-content">• 滑雪溜冰<br>• 堆雪人<br>• 泡温泉<br>• 室内聚会</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 春天效果 - 粉色花瓣飘落
+        const springEffect = document.getElementById('springEffect');
+        for (let i = 0; i < 25; i++) {
+            const petal = document.createElement('div');
+            petal.classList.add('petal');
+            
+            const size = Math.random() * 15 + 5;
+            petal.style.width = `${size}px`;
+            petal.style.height = `${size}px`;
+            petal.style.left = `${Math.random() * 100}%`;
+            petal.style.top = `${-Math.random() * 100}px`;
+            
+            const duration = Math.random() * 5 + 5;
+            const delay = Math.random() * 5;
+            petal.style.animationDuration = `${duration}s`;
+            petal.style.animationDelay = `${delay}s`;
+            
+            const colors = ['#ffb6c1', '#ffc0cb', '#ff69b4', '#ff1493'];
+            petal.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+            
+            springEffect.appendChild(petal);
+        }
+        
+        // 秋天效果 - 落叶飘落
+        const autumnEffect = document.getElementById('autumnEffect');
+        for (let i = 0; i < 18; i++) {
+            const leaf = document.createElement('div');
+            leaf.classList.add('leaf');
+            
+            const size = Math.random() * 20 + 15;
+            leaf.style.width = `${size}px`;
+            leaf.style.height = `${size}px`;
+            leaf.style.left = `${Math.random() * 100}%`;
+            leaf.style.top = `${-Math.random() * 100}px`;
+            
+            const duration = Math.random() * 8 + 5;
+            const delay = Math.random() * 5;
+            leaf.style.animationDuration = `${duration}s`;
+            leaf.style.animationDelay = `${delay}s`;
+            
+            autumnEffect.appendChild(leaf);
+        }
+        
+        // 冬天效果 - 雪花飘落
+        const winterEffect = document.getElementById('winterEffect');
+        for (let i = 0; i < 30; i++) {
+            const snowflake = document.createElement('div');
+            snowflake.classList.add('snowflake');
+            snowflake.innerHTML = '❄';
+            
+            const size = Math.random() * 1.2 + 0.8;
+            snowflake.style.fontSize = `${size}em`;
+            snowflake.style.left = `${Math.random() * 100}%`;
+            snowflake.style.top = `${-Math.random() * 100}px`;
+            
+            const duration = Math.random() * 8 + 5;
+            const delay = Math.random() * 5;
+            snowflake.style.animationDuration = `${duration}s`;
+            snowflake.style.animationDelay = `${delay}s`;
+            
+            const rotation = Math.random() * 360;
+            snowflake.style.transform = `rotate(${rotation}deg)`;
+            
+            winterEffect.appendChild(snowflake);
+        }
+        
+        // 弹窗功能
+        const cards = document.querySelectorAll('.card');
+        const modals = document.querySelectorAll('.modal');
+        const closeBtns = document.querySelectorAll('.close-btn, .close-btn-container');
+        
+        cards.forEach(card => {
+            card.addEventListener('click', () => {
+                const season = card.getAttribute('data-season');
+                const modal = document.getElementById(`${season}Modal`);
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            });
+        });
+        
+        closeBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                modals.forEach(modal => modal.classList.remove('active'));
+                document.body.style.overflow = 'auto';
+            });
+        });
+        
+        // 点击模态框背景关闭弹窗
+        modals.forEach(modal => {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.classList.remove('active');
+                    document.body.style.overflow = 'auto';
+                }
+            });
+        });
+        
+        // 按ESC键关闭弹窗
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                modals.forEach(modal => modal.classList.remove('active'));
+                document.body.style.overflow = 'auto';
+            }
+        });
+    </script>
+</body>
+</html>
